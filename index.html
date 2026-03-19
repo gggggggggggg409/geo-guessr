@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geo Guessr-like Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #game { max-width: 800px; margin: auto; text-align: center; }
+        #map { width: 100%; height: 400px; background-color: #eee; }
+        #guess-btn { padding: 10px 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <h1>Geo Guessr-like Game</h1>
+        <div id="map">Map Loading...</div>
+        <input type="text" id="guess" placeholder="Enter your guess here">
+        <button id="guess-btn">Make Guess</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        let correctLocation = { lat: 40.7128, lng: -74.0060 }; // Example: New York City
+
+        document.getElementById('guess-btn').onclick = function() {
+            let userGuess = document.getElementById('guess').value;
+            let result = document.getElementById('result');
+            // Implement the logic to compare the user's guess with the correctLocation
+            // For demo purposes, we'll just display a success message.
+            result.innerHTML = 'You guessed: ' + userGuess + ' - Correct location is New York City!';
+        };
+    </script>
+</body>
+</html>
