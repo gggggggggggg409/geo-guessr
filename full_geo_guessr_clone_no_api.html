@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>GeoGuessr Clone</title>
+<style>
+body { font-family: Arial; text-align:center; background:#111; color:white; }
+#game { max-width:900px; margin:auto; }
+img { width:100%; border-radius:10px; }
+#map { height:400px; margin-top:10px; background:#222; position:relative; }
+.marker { width:10px; height:10px; background:red; border-radius:50%; position:absolute; }
+button { padding:10px 20px; margin:10px; }
+</style>
+</head>
+<body>
+<div id="game">
+<h1>GeoGuessr Clone 🌍</h1>
+<p id="round">Runda 1 / 5</p>
+<img id="image" src="">
+<div id="map"></div>
+<button onclick="guess()">Gissa</button>
+<p id="result"></p>
+</div>
+
+<script>
+const locations = [
+  {img:"https://picsum.photos/id/1011/800/400", x:80, y:120, name:"Sverige"},
+  {img:"https://picsum.photos/id/1015/800/400", x:300, y:200, name:"USA"},
+  {img:"https://picsum.photos/id/1016/800/400", x:500, y:100, name:"Japan"},
+  {img:"https://picsum.photos/id/1020/800/400", x:250, y:250, name:"Brasilien"},
+  {img:"https://picsum.photos/id/1024/800/400", x:400, y:150, name:"Frankrike"}
+];
+
+let current = 0;
+let score = 0;
+let guessPos = null;
+
+const map = document.getElementById("map");
+
+map.addEventListener("click", function(e) {
+  const rect = map.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  guessPos = {x, y};
+
+  map.innerHTML = "";
+  const marker = document.createElement("div");
+  marker.className = "marker";
+  marker.style.left = x + "px";
+  marker.style.top = y + "px";
+  map.appendChild(marker);
+});
+
+function loadRound() {
+  document.getElementById("image").src = locations[current].img;
+  document.getElementById("round").innerText = `Runda ${current+1} / 5`;
+  map.innerHTML = "";
+  document.getElementById("result").innerText = "";
+}
+
+function guess() {
+  if (!guessPos) {
+    alert("Klicka på kartan!");
+    return;
+  }
+
+  const loc = locations[current];
+  const dx = guessPos.x - loc.x;
+  const dy = guessPos.y - loc.y;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+
+  const points = Math.max(0, 1000 - Math.round(dist));
+  score += points;
+
+  document.getElementById("result").innerText =
+    `Du fick ${points} poäng! Totalt: ${score}`;
+
+  current++;
+  guessPos = null;
+
+  if (current < locations.length) {
+    setTimeout(loadRound, 1500);
+  } else {
+    setTimeout(() => {
+      alert("Spelet slut! Poäng: " + score);
+    }, 1500);
+  }
+}
+
+loadRound();
+</script>
+</body>
+</html>
